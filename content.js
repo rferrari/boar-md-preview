@@ -11,7 +11,7 @@
   if (!source) return;
 
   // What the page shows around the document. The user picks it in the settings page.
-  const DEFAULT_TOOLS = { contents: true, theme: true, textSize: true, raw: true, print: false, readingTime: true };
+  const DEFAULT_TOOLS = { contents: true, theme: true, textSize: true, raw: true, print: false, readingTime: true, settings: true };
   const DEFAULTS = { theme: 'auto', fontSize: 16, liveReload: true, alwaysPreview: {}, tools: DEFAULT_TOOLS };
   const THEMES = ['auto', 'moonlight', 'campfire', 'day'];
   const THEME_NAMES = { auto: 'Auto', moonlight: 'Moonlight', campfire: 'Campfire', day: 'Day' };
@@ -101,7 +101,11 @@
           '<button type="button" data-font="1" title="Larger text">A+</button>'
         : '') +
       (show.print ? '<button type="button" class="bmp-print" title="Print or save as PDF">Print</button>' : '') +
-      (show.raw ? '<button type="button" class="bmp-raw-toggle" title="Show the Markdown source">Raw</button>' : '');
+      (show.raw ? '<button type="button" class="bmp-raw-toggle" title="Show the Markdown source">Raw</button>' : '') +
+      (show.settings
+        ? '<button type="button" class="bmp-settings" title="Settings" aria-label="Settings">' +
+          '<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2-1.6-2-3.4-2.4 1a7.4 7.4 0 0 0-1.7-1L15 3.5h-4l-.4 2.5a7.4 7.4 0 0 0-1.7 1l-2.4-1-2 3.4L6.6 11a7.6 7.6 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7.4 7.4 0 0 0 1.7 1l.4 2.5h4l.4-2.5a7.4 7.4 0 0 0 1.7-1l2.4 1 2-3.4zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)"/></svg></button>'
+        : '');
 
     sidebar = document.createElement('nav');
     sidebar.className = 'bmp-sidebar';
@@ -181,6 +185,8 @@
       applyFontSize();
     }));
     tools.querySelector('.bmp-print')?.addEventListener('click', () => window.print());
+    tools.querySelector('.bmp-settings')?.addEventListener('click', () =>
+      chrome.runtime.sendMessage({ type: 'open-options' }));
     tools.querySelector('.bmp-toc-toggle')?.addEventListener('click', () =>
       document.body.classList.toggle('bmp-toc-open'));
     sidebar.addEventListener('click', (e) => {

@@ -84,6 +84,7 @@ html.bmp { background: var(--bg); }
   font: inherit;
 }
 .bmp-tools button:hover, .bmp-copy:hover { border-color: var(--accent); }
+.bmp-tools .bmp-settings { display: flex; align-items: center; padding: 4px 8px; }
 
 /* ---- content ---------------------------------------------------------------------- */
 .bmp-article h1, .bmp-article h2, .bmp-article h3,

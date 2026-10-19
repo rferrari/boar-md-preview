@@ -1,10 +1,10 @@
 // Settings page: theme, text size, page tools, live reload, file access and always-preview sites.
 // Every change saves at once; open previews pick it up on their next load.
-const DEFAULT_TOOLS = { contents: true, theme: true, textSize: true, raw: true, print: false, readingTime: true };
+const DEFAULT_TOOLS = { contents: true, theme: true, textSize: true, raw: true, print: false, readingTime: true, settings: true };
 const PRESETS = {
-  full: { contents: true, theme: true, textSize: true, raw: true, print: true, readingTime: true },
-  minimal: { contents: true, theme: false, textSize: false, raw: false, print: false, readingTime: false },
-  none: { contents: false, theme: false, textSize: false, raw: false, print: false, readingTime: false },
+  full: { contents: true, theme: true, textSize: true, raw: true, print: true, readingTime: true, settings: true },
+  minimal: { contents: true, theme: false, textSize: false, raw: false, print: false, readingTime: false, settings: true },
+  none: { contents: false, theme: false, textSize: false, raw: false, print: false, readingTime: false, settings: false },
 };
 const DEFAULTS = { theme: 'auto', fontSize: 16, liveReload: true, alwaysPreview: {}, tools: DEFAULT_TOOLS };
 

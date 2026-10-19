@@ -6,5 +6,5 @@ version=$(sed -n 's/.*"version": *"\([^"]*\)".*/\1/p' manifest.json | head -1)
 mkdir -p dist
 out="dist/boar-md-preview-$version.zip"
 rm -f "$out"
-zip -q -r "$out" manifest.json md.js content.js style.css options.html options.css options.js icons fonts
+zip -q -r "$out" manifest.json background.js md.js content.js style.css options.html options.css options.js icons fonts
 echo "$out"
