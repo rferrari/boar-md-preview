@@ -26,7 +26,7 @@ Open a `.md` file in Brave, Chrome or Edge (`file:///…/report.md`, or a raw fi
 | **Code** | Code blocks with a language label and a Copy button; inline `code` stands out |
 | **Lists** | Nested, numbered (keeps the start number) and task lists with checkboxes |
 | **GitHub extras** | Alerts (`> [!NOTE]`, `[!TIP]`, `[!IMPORTANT]`, `[!WARNING]`, `[!CAUTION]`), footnotes, strikethrough, autolinks |
-| **Reading** | Three themes, text size A− / A+, reading time, Print (or save as PDF), and a Raw button for the source |
+| **Reading** | Three themes, text size A− / A+, reading time, a Raw button for the source, and an optional Print button |
 | **Live reload** | A local file refreshes on its own when you save it, keeping your place on the page |
 
 ### Themes
@@ -61,13 +61,16 @@ Try it with [`docs/sample.md`](docs/sample.md).
 
 ## Settings
 
-Right-click the extension icon → **Options**:
+Right-click the extension icon → **Options**. You decide what the page shows, not us:
 
-- Theme (Auto, Moonlight, Campfire, Day) and text size
-- Live reload for local files, on or off
-- The websites that always preview
+- **Theme** (Auto, Moonlight, Campfire, Day) and **text size**, with a live sample
+- **Page tools**: **Full**, **Minimal** (just the contents), **None** (only the document), or pick each item: contents, theme button, text size, reading time, Raw, Print
+- **Files on this computer**: shows whether file access is on, with a button to turn it on, and live reload on or off
+- **Websites** that always preview, with Remove
 
 The theme and text size buttons on the page change the same settings.
+
+<p align="center"><img src="docs/screenshots/settings.png" width="560" alt="BOAR MD Preview settings page"></p>
 
 ## Privacy and permissions
 
@@ -90,7 +93,7 @@ No build step and no dependencies: the extension is the files in this folder.
 | `md.js` | The Markdown renderer: a pure function, no DOM, used by the page and by the tests |
 | `content.js` | The page script: the Preview / Keep raw bar, layout, themes, tools, live reload |
 | `style.css` | Themes and layout, scoped to the extension's own classes |
-| `options.html`, `options.js` | The settings page |
+| `options.html`, `options.css`, `options.js` | The settings page |
 | `test/md.test.js` | Renderer tests, including links and HTML a hostile file could try |
 
 ```bash

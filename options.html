@@ -2,45 +2,103 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>BOAR MD Preview · Settings</title>
-  <style>
-    :root { color-scheme: light dark; }
-    body { margin: 0; padding: 24px 28px; font: 14px/1.5 system-ui, sans-serif; background: #0e1520; color: #f3ecdc; max-width: 560px; }
-    @media (prefers-color-scheme: light) { body { background: #f6f0e4; color: #1d2419; } }
-    h1 { font-size: 20px; margin: 0 0 16px; }
-    h2 { font-size: 14px; margin: 24px 0 8px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.75; }
-    label { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
-    select, input[type=number] { font: inherit; padding: 4px 6px; }
-    ul { list-style: none; padding: 0; margin: 0; }
-    li { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(127,127,127,0.25); }
-    button { font: inherit; cursor: pointer; padding: 3px 10px; }
-    .empty { opacity: 0.7; }
-    .saved { margin-left: 8px; opacity: 0; transition: opacity 0.2s; }
-    .saved.show { opacity: 0.8; }
-  </style>
+  <link rel="stylesheet" href="options.css">
 </head>
 <body>
-  <h1>BOAR MD Preview</h1>
+  <main class="page">
+    <header class="hero">
+      <img src="icons/icon-128.png" alt="" width="64" height="64">
+      <div class="hero-text">
+        <h1>BOAR MD Preview</h1>
+        <p>Markdown files, readable. Choose how the page looks and what sits around it.</p>
+      </div>
+      <a class="site" href="https://boarapp.com/" target="_blank" rel="noopener">boarapp.com ↗</a>
+    </header>
 
-  <h2>Look</h2>
-  <label>Theme
-    <select id="theme">
-      <option value="auto">Auto (Moonlight at night, Day in light mode)</option>
-      <option value="moonlight">Moonlight</option>
-      <option value="campfire">Campfire</option>
-      <option value="day">Day</option>
-    </select>
-  </label>
-  <label>Text size <input id="fontSize" type="number" min="12" max="24" step="1"> px</label>
+    <section class="card">
+      <h2>Theme</h2>
+      <div class="themes" role="radiogroup" aria-label="Theme">
+        <label class="theme-card" data-theme="auto">
+          <input type="radio" name="theme" value="auto">
+          <span class="swatch split"><i class="moon"></i><i class="day"></i></span>
+          <b>Auto</b><small>Follows your system</small>
+        </label>
+        <label class="theme-card" data-theme="moonlight">
+          <input type="radio" name="theme" value="moonlight">
+          <span class="swatch moonlight"><em></em><em></em><em></em></span>
+          <b>Moonlight</b><small>Moon blue on night</small>
+        </label>
+        <label class="theme-card" data-theme="campfire">
+          <input type="radio" name="theme" value="campfire">
+          <span class="swatch campfire"><em></em><em></em><em></em></span>
+          <b>Campfire</b><small>Ember on forest</small>
+        </label>
+        <label class="theme-card" data-theme="day">
+          <input type="radio" name="theme" value="day">
+          <span class="swatch day"><em></em><em></em><em></em></span>
+          <b>Day</b><small>Warm paper</small>
+        </label>
+      </div>
 
-  <h2>Local files</h2>
-  <label><input id="liveReload" type="checkbox"> Refresh the preview when the file changes on disk</label>
+      <div class="row size-row">
+        <label for="fontSize">Text size</label>
+        <input id="fontSize" type="range" min="12" max="24" step="1">
+        <output id="fontSizeValue"></output>
+      </div>
+      <p class="sample" id="sample">The quick boar reads the whole library offline.</p>
+    </section>
 
-  <h2>Websites that always preview</h2>
-  <ul id="sites"></ul>
-  <p class="empty" id="noSites">None. Tick "Always preview" on a site's Markdown file to add it.</p>
+    <section class="card">
+      <h2>Page tools</h2>
+      <p class="hint">What appears around the document. Pick a set, or choose each item.</p>
+      <div class="presets" role="radiogroup" aria-label="Page tools">
+        <button type="button" data-preset="full">Full</button>
+        <button type="button" data-preset="minimal">Minimal</button>
+        <button type="button" data-preset="none">None</button>
+        <span class="preset-custom" id="presetCustom">Custom</span>
+      </div>
+      <div class="tools">
+        <label class="tool"><input type="checkbox" data-tool="contents"><span><b>Contents</b><small>Sidebar on wide screens, a button on narrow ones</small></span></label>
+        <label class="tool"><input type="checkbox" data-tool="theme"><span><b>Theme button</b><small>Switch themes from the page</small></span></label>
+        <label class="tool"><input type="checkbox" data-tool="textSize"><span><b>Text size</b><small>A− and A+ buttons</small></span></label>
+        <label class="tool"><input type="checkbox" data-tool="readingTime"><span><b>Reading time</b><small>Words and minutes above the title</small></span></label>
+        <label class="tool"><input type="checkbox" data-tool="raw"><span><b>Raw</b><small>Show the Markdown source</small></span></label>
+        <label class="tool"><input type="checkbox" data-tool="print"><span><b>Print</b><small>Print or save as PDF (Ctrl+P works anyway)</small></span></label>
+      </div>
+    </section>
 
-  <span class="saved" id="saved">Saved</span>
+    <section class="card">
+      <h2>Files on this computer</h2>
+      <div class="status" id="fileStatus">
+        <span class="dot"></span>
+        <span class="status-text" id="fileStatusText">Checking…</span>
+        <button type="button" id="openDetails" hidden>Turn it on</button>
+      </div>
+      <label class="switch-row">
+        <span><b>Live reload</b><small>The preview refreshes when you save the file</small></span>
+        <input type="checkbox" id="liveReload" class="switch">
+      </label>
+    </section>
+
+    <section class="card">
+      <h2>Websites</h2>
+      <p class="hint">On a website, a raw <code>.md</code> file asks first: Preview or Keep raw. These sites skip the question.</p>
+      <ul class="sites" id="sites"></ul>
+      <p class="empty" id="noSites">No sites yet. Tick <b>Always preview</b> on a site's Markdown file to add it here.</p>
+    </section>
+
+    <footer class="footer">
+      <span>Made by <a href="https://boarapp.com/" target="_blank" rel="noopener">BOAR</a>: a small AI and a library of knowledge on your phone.</span>
+      <span class="links">
+        <a href="https://github.com/rferrari/boar-md-preview" target="_blank" rel="noopener">Source</a>
+        <a href="https://github.com/rferrari/boar-md-preview/blob/main/PRIVACY.md" target="_blank" rel="noopener">Privacy</a>
+        <span id="version"></span>
+      </span>
+    </footer>
+  </main>
+  <div class="toast" id="toast" role="status">Saved</div>
   <script src="options.js"></script>
 </body>
 </html>

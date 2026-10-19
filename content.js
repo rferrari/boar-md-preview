@@ -10,7 +10,9 @@
   let source = pre ? pre.textContent : document.body.innerText;
   if (!source) return;
 
-  const DEFAULTS = { theme: 'auto', fontSize: 16, liveReload: true, alwaysPreview: {} };
+  // What the page shows around the document. The user picks it in the settings page.
+  const DEFAULT_TOOLS = { contents: true, theme: true, textSize: true, raw: true, print: false, readingTime: true };
+  const DEFAULTS = { theme: 'auto', fontSize: 16, liveReload: true, alwaysPreview: {}, tools: DEFAULT_TOOLS };
   const THEMES = ['auto', 'moonlight', 'campfire', 'day'];
   const THEME_NAMES = { auto: 'Auto', moonlight: 'Moonlight', campfire: 'Campfire', day: 'Day' };
   const isLocal = location.protocol === 'file:';
@@ -23,7 +25,7 @@
   };
 
   chrome.storage.local.get(DEFAULTS, (stored) => {
-    settings = stored;
+    settings = { ...stored, tools: { ...DEFAULT_TOOLS, ...stored.tools } };
     if (isLocal || settings.alwaysPreview[host]) render();
     else ask();
   });
@@ -88,15 +90,18 @@
     document.body.textContent = '';
     document.body.className = 'bmp-body';
 
+    const show = settings.tools;
     const tools = document.createElement('div');
     tools.className = 'bmp-tools';
     tools.innerHTML =
-      '<button type="button" class="bmp-toc-toggle" title="Contents">Contents</button>' +
-      '<button type="button" class="bmp-theme" title="Theme"></button>' +
-      '<button type="button" data-font="-1" title="Smaller text">A−</button>' +
-      '<button type="button" data-font="1" title="Larger text">A+</button>' +
-      '<button type="button" class="bmp-print" title="Print or save as PDF">Print</button>' +
-      '<button type="button" class="bmp-raw-toggle" title="Show the Markdown source">Raw</button>';
+      (show.contents ? '<button type="button" class="bmp-toc-toggle" title="Contents">Contents</button>' : '') +
+      (show.theme ? '<button type="button" class="bmp-theme" title="Theme"></button>' : '') +
+      (show.textSize
+        ? '<button type="button" data-font="-1" title="Smaller text">A−</button>' +
+          '<button type="button" data-font="1" title="Larger text">A+</button>'
+        : '') +
+      (show.print ? '<button type="button" class="bmp-print" title="Print or save as PDF">Print</button>' : '') +
+      (show.raw ? '<button type="button" class="bmp-raw-toggle" title="Show the Markdown source">Raw</button>' : '');
 
     sidebar = document.createElement('nav');
     sidebar.className = 'bmp-sidebar';
@@ -115,7 +120,10 @@
     const main = document.createElement('main');
     main.className = 'bmp-main';
     main.append(meta, article, raw);
-    document.body.append(tools, sidebar, main);
+    if (show.contents) document.body.append(sidebar);
+    if (tools.children.length) document.body.append(tools);
+    document.body.append(main);
+    meta.hidden = !show.readingTime;
 
     fill();
     wireTools(tools);
@@ -137,7 +145,7 @@
       ? '<p class="bmp-sidebar-title">Contents</p>' + r.toc.map((t) =>
         `<a class="l${t.level}" href="#${t.id}">${BoarMd.escapeHtml(t.text)}</a>`).join('')
       : '';
-    document.body.classList.toggle('bmp-has-toc', r.toc.length >= 3);
+    document.body.classList.toggle('bmp-has-toc', settings.tools.contents && r.toc.length >= 3);
 
     // Copy buttons on code blocks.
     article.querySelectorAll('pre.code').forEach((block) => {
@@ -164,7 +172,7 @@
   }
 
   function wireTools(tools) {
-    tools.querySelector('.bmp-theme').addEventListener('click', () => {
+    tools.querySelector('.bmp-theme')?.addEventListener('click', () => {
       save({ theme: THEMES[(THEMES.indexOf(settings.theme) + 1) % THEMES.length] });
       applyTheme();
     });
@@ -172,14 +180,14 @@
       save({ fontSize: Math.min(24, Math.max(12, settings.fontSize + Number(b.dataset.font))) });
       applyFontSize();
     }));
-    tools.querySelector('.bmp-print').addEventListener('click', () => window.print());
-    tools.querySelector('.bmp-toc-toggle').addEventListener('click', () =>
+    tools.querySelector('.bmp-print')?.addEventListener('click', () => window.print());
+    tools.querySelector('.bmp-toc-toggle')?.addEventListener('click', () =>
       document.body.classList.toggle('bmp-toc-open'));
     sidebar.addEventListener('click', (e) => {
       if (e.target.tagName === 'A') document.body.classList.remove('bmp-toc-open');
     });
     const rawToggle = tools.querySelector('.bmp-raw-toggle');
-    rawToggle.addEventListener('click', () => {
+    rawToggle?.addEventListener('click', () => {
       const showRaw = raw.hidden;
       raw.hidden = !showRaw;
       article.hidden = showRaw;
