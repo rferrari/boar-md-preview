@@ -1,0 +1,11 @@
+{
+  "name": "boar-md-preview",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Browser extension that renders Markdown files as readable pages. No dependencies.",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "pack": "sh scripts/pack.sh"
+  }
+}

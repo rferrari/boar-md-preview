@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>BOAR MD Preview · Settings</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { margin: 0; padding: 24px 28px; font: 14px/1.5 system-ui, sans-serif; background: #0e1520; color: #f3ecdc; max-width: 560px; }
+    @media (prefers-color-scheme: light) { body { background: #f6f0e4; color: #1d2419; } }
+    h1 { font-size: 20px; margin: 0 0 16px; }
+    h2 { font-size: 14px; margin: 24px 0 8px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.75; }
+    label { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
+    select, input[type=number] { font: inherit; padding: 4px 6px; }
+    ul { list-style: none; padding: 0; margin: 0; }
+    li { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(127,127,127,0.25); }
+    button { font: inherit; cursor: pointer; padding: 3px 10px; }
+    .empty { opacity: 0.7; }
+    .saved { margin-left: 8px; opacity: 0; transition: opacity 0.2s; }
+    .saved.show { opacity: 0.8; }
+  </style>
+</head>
+<body>
+  <h1>BOAR MD Preview</h1>
+
+  <h2>Look</h2>
+  <label>Theme
+    <select id="theme">
+      <option value="auto">Auto (Moonlight at night, Day in light mode)</option>
+      <option value="moonlight">Moonlight</option>
+      <option value="campfire">Campfire</option>
+      <option value="day">Day</option>
+    </select>
+  </label>
+  <label>Text size <input id="fontSize" type="number" min="12" max="24" step="1"> px</label>
+
+  <h2>Local files</h2>
+  <label><input id="liveReload" type="checkbox"> Refresh the preview when the file changes on disk</label>
+
+  <h2>Websites that always preview</h2>
+  <ul id="sites"></ul>
+  <p class="empty" id="noSites">None. Tick "Always preview" on a site's Markdown file to add it.</p>
+
+  <span class="saved" id="saved">Saved</span>
+  <script src="options.js"></script>
+</body>
+</html>
