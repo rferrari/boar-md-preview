@@ -107,7 +107,7 @@ The renderer covers the GitHub-flavoured Markdown people write day to day. It is
 ## Credits
 
 - Headings use [Archivo](https://github.com/Omnibus-Type/Archivo), bundled under the SIL Open Font License ([fonts/Archivo-OFL.txt](fonts/Archivo-OFL.txt)).
-- Made by the [BOAR](https://boarapp.com/) team. BOAR keeps a small AI and a library of knowledge on your phone.
+- Made by the [BOAR](https://boarapp.com/) team. BOAR keeps an offline AI and a library of knowledge on your phone.
 
 ## License
 
