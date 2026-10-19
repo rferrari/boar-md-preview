@@ -1,6 +1,6 @@
 # Field report: offline research on a phone
 
-BOAR keeps a small AI and a library on your phone. This page is a **sample** for BOAR MD Preview: open it in the browser with the extension on and it reads like a document, not a wall of text.
+BOAR keeps an offline AI and a library on your phone. This page is a **sample** for BOAR MD Preview: open it in the browser with the extension on and it reads like a document, not a wall of text.
 
 ## What was measured
 
